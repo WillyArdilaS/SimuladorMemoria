@@ -12,23 +12,23 @@ const VariableSizeStatic  = () => {
         <div>
           <Header/>
 
-          <div className="fixed top-32 left-10 animate-fade-down animate-duration-1000">
+          <div className="fixed top-36 left-10 animate-fade-down animate-duration-1000">
             <FeaturesTable/>
           </div>
 
-          <div className="fixed top-32 left-80 ml-48 w-full animate-fade-down animate-duration-1000">
+          <div className="fixed top-36 left-80 ml-48 w-full animate-fade-down animate-duration-1000">
             <Performance/>
           </div>
 
-          <div className="fixed top-1/2 left-10 w-full animate-fade-down animate-duration-1000">
+          <div className="fixed top-1/2 left-10 mt-4 w-full animate-fade-down animate-duration-1000">
             <AdjustmentSelector/>
           </div>
 
-          <div className="fixed top-32 right-96 mr-4 animate-fade-down animate-duration-1000">
+          <div className="fixed top-36 right-96 mr-4 animate-fade-down animate-duration-1000">
             <AddressTable/>
           </div>
 
-          <div className="fixed top-32 right-12 animate-fade-down animate-duration-1000">
+          <div className="fixed top-28 right-12 animate-fade-down animate-duration-1000">
             <MemoryTable/>
           </div>
 

@@ -1,0 +1,91 @@
+[
+    {
+        "id": "P1",
+        "nombrePrograma": "Notepad",
+        "tamañoDisco": "33808",
+        "tamañoCodigo": "19524",
+        "tdatosInicializados": "12352", 
+        "tdatosSinIniciar": "1165",
+        "memoriaInicial":"33041",
+        "memoriaUsar":"224649",
+        "kib":"219.38"
+    },
+
+    {
+        "id": "P2",
+        "nombrePrograma": "Word",
+        "tamañoDisco": "115086",
+        "tamañoCodigo": "77539",
+        "tdatosInicializados": "32680", 
+        "tdatosSinIniciar": "4100",
+        "memoriaInicial":"114319",
+        "memoriaUsar":"268708",
+        "kib":"279.99"
+    },
+    {
+        "id": "P3",
+        "nombrePrograma": "Excel",
+        "tamañoDisco": "132111",
+        "tamañoCodigo": "99542",
+        "tdatosInicializados": "24245", 
+        "tdatosSinIniciar": "7557",
+        "memoriaInicial":"131344",
+        "memoriaUsar":"309150",
+        "kib":"301.9"
+    },
+    {
+        "id": "P4",
+        "nombrePrograma": "AutoCAD",
+        "tamañoDisco": "240360",
+        "tamañoCodigo": "115000",
+        "tdatosInicializados": "123470", 
+        "tdatosSinIniciar": "1123",
+        "memoriaInicial":"239593",
+        "memoriaUsar":"436201",
+        "kib":"425.98"
+    },
+    {
+        "id": "P5",
+        "nombrePrograma": "Calculadora",
+        "tamañoDisco": "16121",
+        "tamañoCodigo": "12342",
+        "tdatosInicializados": "1256", 
+        "tdatosSinIniciar": "1756",
+        "memoriaInicial":"15354",
+        "memoriaUsar":"209462",
+        "kib":"204.55"
+    },
+    {
+        "id": "P6",
+        "nombrePrograma": "Chrome",
+        "tamañoDisco": "3800767",
+        "tamañoCodigo": "525000",
+        "tdatosInicializados": "3224000", 
+        "tdatosSinIniciar": "51000",
+        "memoriaInicial":"3800000",
+        "memoriaUsar":"3996608",
+        "kib":"3902.94"
+    },
+    {
+        "id": "P7",
+        "nombrePrograma": "Illustrator",
+        "tamañoDisco": "1589767",
+        "tamañoCodigo": "19524",
+        "tdatosInicializados": "974000", 
+        "tdatosSinIniciar": "25000",
+        "memoriaInicial":"1589000",
+        "memoriaUsar":"1785608",
+        "kib":"1743.76"
+    },
+    {
+        "id": "P8",
+        "nombrePrograma": "Photoshop",
+        "tamañoDisco": "2500767",
+        "tamañoCodigo": "19524",
+        "tdatosInicializados": "2150000", 
+        "tdatosSinIniciar": "1000",
+        "memoriaInicial":"2500000",
+        "memoriaUsar":"2696608",
+        "kib":"2633.41"
+    }
+]
