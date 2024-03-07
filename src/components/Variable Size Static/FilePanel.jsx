@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Draggable from 'react-draggable';
-import FilesInfo from '../data/FilesInfo.json';
-import fileIcon from '../assets/File Icon.jpg'
+import FilesInfo from '../../data/FilesInfo.json';
+import fileIcon from '../../assets/File Icon.jpg'
 import FileDetails from './FileDetails';
-import CreateFileForm from './CreateFileForm';
+import CreateFileForm from '../CreateFileForm';
 
 const FilePanel = ({files, setFiles}) => {
     const [actualFile, setActualFile] = useState();
@@ -21,9 +21,9 @@ const FilePanel = ({files, setFiles}) => {
                 <section>
                     <article className="flex w-1/2 overflow-x-auto bg-white shadow-lg border-2 border-darkGray">
                         <section className="flex p-4">
-                            {FilesInfo.map((file) => (
+                            {FilesInfo.map((file, index) => (
                                 <article key={file.id} className="w-24">
-                                    <button className='hover:scale-105' onClick={() => handleShowDetails(file)}>
+                                    <button className='hover:scale-105' onClick={() => handleShowDetails(file, index)}>
                                         <img src={fileIcon} alt="Icono del archivo" id="fileIcon"/>
                                     </button>       
                                     <h3 className="text-center text-black font-paragraph"> {file.nombrePrograma} </h3> 
@@ -41,7 +41,7 @@ const FilePanel = ({files, setFiles}) => {
                     </button>  
                 </section>  
             ) : (showDetails == true ? (<FileDetails files={files} setFiles={setFiles} actualFile={actualFile} setShowDetails={setShowDetails}/>) : 
-                <CreateFileForm setShowCreateForm={setShowCreateForm}/>) 
+                (<CreateFileForm setShowCreateForm={setShowCreateForm}/>)) 
             }           
         </Draggable>
     )

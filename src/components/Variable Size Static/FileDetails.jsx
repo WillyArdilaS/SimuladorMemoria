@@ -1,16 +1,18 @@
-import fileIcon from '../assets/File Icon.jpg'
+import fileIcon from '../../assets/File Icon.jpg'
 
 const FileDetails = ({files, setFiles, actualFile, setShowDetails}) => {
     const handleExecute = () => {
         const updatedFiles = [...files];
 
         const fileToUpdate = updatedFiles.find(item => item.nombrePrograma == actualFile.nombrePrograma);
-        fileToUpdate.estado = !fileToUpdate.estado;
 
-        setFiles(updatedFiles);
+        fileToUpdate.memoriaUsar <= 4194304 ? (
+            fileToUpdate.estado = !fileToUpdate.estado,
+            setFiles(updatedFiles)
+        ) : (alert("No hay espacio suficiente en la memoria"))
+        
         setShowDetails(false);
     }
-
 
     return (
         <article className="z-10 min-h-screen flex items-center justify-center">

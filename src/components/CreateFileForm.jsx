@@ -88,7 +88,7 @@ const CreateFileForm = ({setShowCreateForm}) => {
 
                 <section className="bg-gray-100 rounded-b-lg py-4 px-6 flex flex-row-reverse">
                     <button type="button" className="ml-6 px-6 py-2 bg-blue rounded-md shadow-md font-paragraph font-medium text-sm text-white hover:scale-105" 
-                    onClick={handleCreateFile}> Ejecutar </button>
+                    onClick={handleCreateFile}> Añadir </button>
                     <button type="button" className="px-6 py-2 bg-white rounded-md shadow-md font-paragraph font-medium text-sm text-darkGray hover:scale-105"
                     onClick={() => setShowCreateForm(false)}> Cancelar </button>
                 </section>
