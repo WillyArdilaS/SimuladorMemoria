@@ -1,35 +1,72 @@
 import { useEffect, useState } from 'react';
+import Draggable from 'react-draggable';
 
-const MemoryFiles = ({blockSizes, setBlockSizes, addressLimits, setAddressLimits, adjustment, files, setActiveFiles}) => {
+const MemoryFiles = ({offset, blockSizes, setBlockSizes, addressLimits, setAddressLimits, adjustment, files, setActiveFiles}) => {
     const [tableData, setTableData] = useState([]);
     const [dataHtml, setDataHtml] = useState([]);
+    const [fileEffectCompleted, setFileEffectCompleted] = useState(false);
 
-    const calcultePerc = (memoryUsed, memoryFree, containerHeight) => {
+    const createSegment = (id, programName, segment, segmentaName, updatedFiles) => {
+        let emptyIndex = 0;
+        let numSegments = 1;
+        let value = parseInt(segment);
+        let blockSizesToAdd = [...blockSizes]; 
+        //let addressLimitsToAdd = [];
+    
+        if (value > offset) {
+            numSegments = Math.ceil(value / offset);
+        }
+    
+        for (let i = 0; i < numSegments; i++) {
+            updatedFiles.unshift(null);
+    
+            if (adjustment === 'best' && value <= offset) {
+                emptyIndex = bestAdjustment(value, updatedFiles);
+            } else if (adjustment === 'best' && value > offset) {
+                emptyIndex = bestAdjustment(offset, updatedFiles);
+            }
 
-        return (memoryUsed / memoryFree) * containerHeight;
-    }
-
-    const addBlockSize = (blockSize) => {
-        let updatedBlockSizes = [...blockSizes];
-        updatedBlockSizes.push(blockSize);
-        updatedBlockSizes[0] -= blockSize;
-
-        setBlockSizes(updatedBlockSizes);
-    }
-
-    const addAddressLimits = (memoryUsed) => {
-        let updatedAddressLimits = [...addressLimits];
-        updatedAddressLimits.push(updatedAddressLimits[0]);
-        updatedAddressLimits[0] = parseInt(updatedAddressLimits[0]) + parseInt(memoryUsed);
-
-        setAddressLimits(updatedAddressLimits);
+            console.log(emptyIndex)
+    
+            if (emptyIndex !== undefined) {
+                (value > offset ? (
+                    updatedFiles[emptyIndex] = {id: id, programName: programName, segmentName: segmentaName, value: offset},
+                    blockSizesToAdd[i] = {id: id, blockSize: offset}
+                ) : (
+                    updatedFiles[emptyIndex] = {id: id,  programName: programName, segmentName: segmentaName, value: value},
+                    blockSizesToAdd[i] = {id: id, blockSize: value}
+                ));
+                
+                if (emptyIndex === 0) {
+                    if(value > offset) {
+                        blockSizesToAdd[i] = {id: id, blockSize: offset}
+                        //addressLimitsToAdd.unshift(offset + 1);
+                    } else {
+                        blockSizesToAdd[i] = {id: id, blockSize: value}
+                        //addressLimitsToAdd.unshift(value + 1);
+                    }
+                    
+                } else {
+                    updatedFiles.shift();
+                }
+            }
+    
+            value -= offset;
+    
+            setTableData(updatedFiles);
+        }
+    
+        if (blockSizesToAdd.length > 0) {
+            setBlockSizes(blockSizesToAdd);
+           // setAddressLimits(prevAddressLimits => [...prevAddressLimits, ...addressLimitsToAdd]);
+        }
     }
     
-    const firstAdjustment = (file, updatedFiles) => {
-        let blockIndex = blockSizes.length-1;
+    const bestAdjustment = (value, updatedFiles) => {
+        let blockIndex = blockSizes.length;
     
         do {
-            if (file.memoriaUsar <= blockSizes[blockIndex] && (updatedFiles[blockIndex] === null || updatedFiles[blockIndex] === undefined)) {
+            if (value <= offset && (updatedFiles[blockIndex].id === '')) {
                 return blockIndex;
             }
             blockIndex--;
@@ -39,7 +76,16 @@ const MemoryFiles = ({blockSizes, setBlockSizes, addressLimits, setAddressLimits
             alert("No hay espacio suficiente en la memoria");
         }
     }
+
+    useEffect(() => {
+        const emptyTableData = [...tableData];
+        while (emptyTableData.length < 255) {
+            emptyTableData.push({id: '', programName: '', segmentName: '', value: 0});
+        }
     
+        setTableData(emptyTableData.slice(0, 255));
+    }, []);
+
     useEffect(() => {
         let updatedFiles = [...tableData];
 
@@ -48,79 +94,58 @@ const MemoryFiles = ({blockSizes, setBlockSizes, addressLimits, setAddressLimits
                 let filePos = -1;
 
                 updatedFiles.map((update, index) => {
-                    if(update == file) {
+                    if(update.id == file.id && update.id !== '') {
                         filePos = index; 
                     }
                 })
 
-                if(filePos == -1) {
-                    updatedFiles.unshift(null);
-                    
-                    let emptyIndex;
-
-                    if(adjustment == 'first') {
-                        emptyIndex = firstAdjustment(file, updatedFiles);
-                    }
-
-                    if(emptyIndex !== undefined) {
-                        updatedFiles[emptyIndex] = file;
-
-                        if(emptyIndex === 0) {
-                            addBlockSize(file.memoriaUsar);
-                            addAddressLimits(file.memoriaUsar);
-                        } else {
-                            updatedFiles.shift();
-                        }
-                    } else {
-                        updatedFiles.shift();
-                    }
+                if(filePos == -1) {       
+                    createSegment(file.id, file.nombrePrograma, file.text, 'text', updatedFiles);
+                    createSegment(file.id, file.nombrePrograma, file.data, 'data', updatedFiles);
+                    createSegment(file.id, file.nombrePrograma, file.bss, 'bss', updatedFiles);
+                    createSegment(file.id, file.nombrePrograma, file.heap, 'heap', updatedFiles);
+                    createSegment(file.id, file.nombrePrograma, file.stack, 'stack', updatedFiles);
                 }
-            }
-
-            if(file.estado === false) {
-                let emptyIndexFile = updatedFiles.findIndex(data => data === file);
-                updatedFiles[emptyIndexFile] = null;
+            } else {
+                if(file.id !== '') {
+                    updatedFiles = updatedFiles.filter(data => (data.id !== file.id));
+                    setTableData(updatedFiles);
+                }
             }
         });
 
-        setTableData(updatedFiles);
-
         const updatedActiveFiles = [...updatedFiles]
         setActiveFiles(updatedActiveFiles.reverse());
-    }, [files]);
 
+        setFileEffectCompleted(true);
+    }, [files]);
+    
     useEffect(() => {
         const updatedHtml = tableData.map((data, index) => {
-            return (data != null ? (
-                    <tr style={{height: calcultePerc(data.memoriaUsar, 15728639, 660)}}>
-                        <td className="border-t-2 border-x-2 border-y-2 border-darkGray text-center text-sm">
-                            <div className="flex flex-col relative" style={{height: calcultePerc(data.memoriaUsar, 15728639, 650)}}>
-                                <div className="bg-yellow" style={{height: calcultePerc((blockSizes[blockSizes.length - (index + 1)] - data.memoriaUsar), 
-                                blockSizes[blockSizes.length - (index+1)], calcultePerc(data.memoriaUsar, 15728639, 650))}}></div>
-                                <div className="bg-blue" style={{height: calcultePerc(data.memoriaUsar, blockSizes[blockSizes.length - (index+1)], 
-                                calcultePerc(data.memoriaUsar, 15728639, 650))}}>
-                                    <span className="absolute inset-0 flex items-center justify-center"> {data.id} </span>
+            return (data.id !== '' ? (
+                    <tr style={{height: 20}}>
+                        <td className="w-1/2 border-t-2 border-x-2 border-y-2 border-darkGray text-center text-sm">
+                            <div className="flex flex-col relative">
+                                <div className="bg-blue" style={{height: 20}}>
+                                    <span className="absolute inset-0 flex items-center justify-center"> {data.programName + ' (' + data.segmentName + ')'} </span>
                                 </div>
                             </div>
                         </td>
 
                         <td className=" border-x-2 border-y-2 border-darkGray text-center text-sm">
-                            <div className="flex flex-col relative" style={{height: calcultePerc(data.memoriaUsar, 15728639, 650)}}>
-                                <div className="bg-yellow" style={{height: calcultePerc((blockSizes[blockSizes.length - (index + 1)] - data.memoriaUsar), 
-                                blockSizes[blockSizes.length - (index+1)], calcultePerc(data.memoriaUsar, 15728639, 650))}}></div>
-                                <div className="bg-blue" style={{height: calcultePerc(data.memoriaUsar, blockSizes[blockSizes.length - (index+1)], 
-                                calcultePerc(data.memoriaUsar, 15728639, 650))}}>
-                                    <span className="absolute inset-0 flex items-center justify-center"> {blockSizes[blockSizes.length - (index+1)]}  </span>
+                            <div className="flex flex-col relative">
+                                <div className="bg-blue" style={{height: 20}}>
+                                    <span className="absolute inset-0 flex items-center justify-center"> {data.value}  </span>
                                 </div>
                             </div>
                         </td>
 
-                        <td className="align-bottom pl-2 text-xs font-semibold"> {addressLimits[addressLimits.length - (index + 1)]} </td>
+                        <td className="align-bottom pl-2 text-xs font-semibold"> {addressLimits[addressLimits.length - (index + 2)]} </td>
                     </tr>
                 ) : (
-                    <tr style={{height: calcultePerc(blockSizes[blockSizes.length - (index + 1)], 15728639, 660)}}>
+                    <tr style={{height: 20}}>
                         <td className="w-24 px-4 py-2 border-x-2 border-y-2 border-darkGray text-center text-sm"> </td>
-                        <td className="w-24 px-4 py-2 border-x-2 border-y-2 border-darkGray text-center text-sm"> {blockSizes[blockSizes.length - (index+1)]} </td>
+                        <td className="w-24 px-4 py-2 border-x-2 border-y-2 border-darkGray text-center text-sm"> 65536 </td>
                         <td className="align-bottom pl-2 text-xs font-semibold"> {addressLimits[addressLimits.length - (index + 1)]} </td>
                     </tr>
                 ) 
@@ -128,33 +153,42 @@ const MemoryFiles = ({blockSizes, setBlockSizes, addressLimits, setAddressLimits
         });        
 
         setDataHtml(updatedHtml);
-    }, [tableData])
+    }, [tableData, addressLimits]);
     
     return (
-        <table className="border-collapse text-darkGray font-paragraph">
-            <thead className='align-top h-8'>
-                <th></th>
-                <th></th>
-                <th className='text-xs'> Dec </th>
-            </thead>
+        <Draggable>
+            <div className='overflow-y-auto overflow-x-hidden max-h-screen'>
+                <table className="border-collapse text-darkGray font-paragraph">
+                    <thead className='align-top h-8'>
+                        <th></th>
+                        <th></th>
+                        <th className='text-xs'> Dec </th>
+                    </thead>
 
-            <tbody>
-                <tr style={{height: calcultePerc(blockSizes[0], 15728639, 660)}}>
-                    <td className="w-24 px-4 py-2 border-x-2 border-y-2 border-darkGray"> </td>
-                    <td className="px-4 py-2 border-x-2 border-y-2 border-darkGray text-center"> {blockSizes[0]} </td>
-                    <td className="align-bottom pl-2 text-xs font-semibold"> {addressLimits[0]} </td>
-                </tr>
+                    <tbody>
+                        {dataHtml}
 
-                {dataHtml}
+                        {
+                            blockSizes.map((data, index) => (
+                                (index < 15 ? (
+                                    <tr className="h-6">
+                                        <td className="w-24 px-4 bg-blue border-x-2 border-y-2 border-darkGray text-center text-sm"> S.O </td>
+                                        <td className="px-4  bg-blue border-x-2 border-y-2 border-darkGray text-center"> {data.blockSize} </td>
+                                    </tr>
+                                ) : false)  
+                            ))
+                        }
 
-                <tr className="h-16">
-                    <td className="w-24 px-4 py-2 bg-blue border-x-2 border-y-2 border-darkGray text-center text-sm"> S.O </td>
-                    <td className="px-4 py-2 bg-blue border-x-2 border-y-2 border-darkGray text-center"> 1048576 </td>
-                    <td className="absolute top-6 left-52 text-xs font-semibold"> 16777215 </td>
-                    <td className="absolute -bottom-1 left-52 ml-1 text-xs font-semibold"> 0 </td>
-                </tr>
-            </tbody>
-        </table>
+                        <tr className="h-6">
+                            <td className="w-24 px-4 bg-blue border-x-2 border-y-2 border-darkGray text-center text-sm"> S.O </td>
+                            <td className="px-4 bg-blue border-x-2 border-y-2 border-darkGray text-center"> 65536 </td>
+                            <td className={`absolute -bottom-1 ${tableData.length > 0 ? 'left-72 ml-4' : 'left-52'} ml-1 text-xs font-semibold`}> 0 </td>
+                            <td className={`absolute top-6 ${tableData.length > 0 ? 'left-72 ml-4' : 'left-52'} text-xs font-semibold`}> 16777215 </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </Draggable>
     )
 }
 

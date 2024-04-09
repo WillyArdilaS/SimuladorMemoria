@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 
-const Performance = ({memorySize, blockSizes, activeFiles}) => {
+const Performance = ({memorySize, blockSizes, filesGroup}) => {
     const [extended, setExtended] = useState(true);
     const [performanceFiles, setPerformanceFiles] = useState([]);
 
@@ -12,16 +12,17 @@ const Performance = ({memorySize, blockSizes, activeFiles}) => {
     useEffect(() => {
         const updatedFiles = [];
 
-        activeFiles.map(file => {
-            if(file !== null && file !== undefined) {
-                updatedFiles.push(file);
-            }
+        filesGroup.map((file, index) => {
+            const sumOfBlockSizes = file.reduce((acc, { value }) => {
+                return acc + value;
+            }, 0);
+
+            updatedFiles.push({nombrePrograma: file[index].programName, memoriaUsar: sumOfBlockSizes});
         })
 
-        setPerformanceFiles(updatedFiles)
-    }, [activeFiles])
+        setPerformanceFiles(updatedFiles);
+    }, [filesGroup]);
     
-
     return (
         <Draggable>
             {extended == true ? (

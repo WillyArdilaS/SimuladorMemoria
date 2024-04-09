@@ -91,7 +91,7 @@ const Segmentation  = () => {
             }
           </div>
 
-          <div className="fixed top-28 right-16 animate-fade-down animate-duration-1000">
+          <div className="fixed top-28 right-10 animate-fade-down animate-duration-1000">
             <MemoryFiles offset={offset} blockSizes={blockSizes} setBlockSizes={setBlockSizes} addressLimits={addressLimits} setAddressLimits={setAddressLimits} 
             adjustment={"best"} files={files} setActiveFiles={setActiveFiles}/>
           </div>

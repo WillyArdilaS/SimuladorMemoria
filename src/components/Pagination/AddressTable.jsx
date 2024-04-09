@@ -1,49 +1,44 @@
 import Draggable from 'react-draggable';
 
-const AddressTable = ({activeFiles, blockSizes, addressLimits}) => {
-  return (
-    <Draggable>
-        <table className="border-collapse bg-white shadow-lg text-darkGray font-paragraph">
-            <thead>
-                <tr className="border-t-2 border-darkGray">
-                    <th rowSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> PID </th>
-                    <th rowSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> L/O </th>
-                    <th colSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Base </th>
-                    <th rowSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Tamaño (KiB) </th>
-                </tr>
+const AddressTable = ({activeFile, addressLimits, addressIndex}) => {   
+    return (
+        <Draggable>
+            <section>
+                <h1 className="text-darkGray text-lg font-semibold mb-2">  Tabla de páginas {activeFile[0].id + " - " + activeFile[0].programName}</h1>
 
-                <tr className="border-t-2 border-darkGray">
-                    <th colSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Dec </th>
-                </tr>
-            </thead>
+                <table className="border-collapse bg-white shadow-lg text-darkGray font-paragraph">
+                    <thead>
+                        <tr className="border-2 border-darkGray">
+                            <th colSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Segmento </th>
+                            <th colSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Base </th>
+                            <th rowSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Límite </th>
+                            <th rowSpan="2" className="px-4 py-2 border-x-2 border-darkGray"> Permisos </th>
+                        </tr>
 
-            <tbody>
-                <tr className="border-y-2 border-darkGray">
-                    <td className="px-4 py-2 border-x-2 border-darkGray text-center"> SO </td>
-                    <td className="px-4 py-2 border-x-2 border-darkGray text-center"> 1 </td>
-                    <td colSpan="2" className="px-4 py-2 border-x-2 border-darkGray text-center"> 0 </td>
-                    <td className="px-4 py-2 border-x-2 border-darkGray text-center"> 1024 </td>
-                </tr>
+                        <tr className="border-2 border-darkGray">
+                            <th className="px-4 py-2 border-x-2 border-darkGray"> Num </th>
+                            <th className="px-4 py-2 border-x-2 border-darkGray"> Bin </th>
+                            <th className="px-4 py-2 border-x-2 border-darkGray"> Dec </th>
+                            <th className="px-4 py-2 border-x-2 border-darkGray"> Hex </th>
+                        </tr>
+                    </thead>
 
-                {activeFiles.map((file, index) => (
-                    <tr className="border-y-2 border-darkGray">
-                        <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {file !== null && file !== undefined ? (file.id) : ("0")} </td>
-                        <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {file !== null && file !== undefined ? ("1") : ("0")} </td>
-                        <td colSpan="2" className="px-4 py-2 border-x-2 border-darkGray text-center"> {addressLimits[index + 1]} </td>
-                        <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {blockSizes[index + 1]} </td>
-                    </tr>
-                ))}
-
-                <tr className="border-y-2 border-darkGray">
-                    <td className="px-4 py-2 border-x-2 border-darkGray text-center"> 0 </td>
-                    <td className="px-4 py-2 border-x-2 border-darkGray text-center"> 0 </td>
-                    <td colSpan="2" className="px-4 py-2 border-x-2 border-darkGray text-center"> {addressLimits[0]} </td>
-                    <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {blockSizes[0]} </td>
-                </tr>
-            </tbody>
-        </table>
-    </Draggable>
-  )
+                    <tbody>
+                        {activeFile.map((file, index) => (
+                            <tr className="border-y-2 border-darkGray">
+                                <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {index} </td>
+                                <td className="px-4 py-2 border-x-2 border-darkGray text-center"> Binario </td>
+                                <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {addressLimits[addressIndex + index]} </td>
+                                <td className="px-4 py-2 border-x-2 border-darkGray text-center"> Hex </td>
+                                <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {file.value} </td>
+                                <td className="px-4 py-2 border-x-2 border-darkGray text-center"> {file.segmentName  == 'text' ? 'RX' : 'RW'} </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </section>
+        </Draggable>
+    )
 }
 
 export default AddressTable

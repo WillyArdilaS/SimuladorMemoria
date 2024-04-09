@@ -10,7 +10,7 @@ const LogicAddressTable = () => {
                 <thead>
                     <tr className="border-t-2 border-darkGray">
                         <th className="px-4 py-2 border-x-2 border-darkGray"> RAM </th>
-                        <th className="px-4 py-2 border-x-2 border-darkGray"> Páginas </th>
+                        <th className="px-4 py-2 border-x-2 border-darkGray"> Segmento </th>
                         <th className="px-4 py-2 border-x-2 border-darkGray"> Offset </th>
                     </tr>
                 </thead>

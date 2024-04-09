@@ -178,30 +178,32 @@ const MemoryFiles = ({offset, blockSizes, setBlockSizes, addressLimits, setAddre
     
     return (
         <Draggable>
-            <table className="border-collapse text-darkGray font-paragraph">
-                <thead className='align-top h-8'>
-                    <th></th>
-                    <th></th>
-                    <th className='text-xs'> Dec </th>
-                </thead>
+            <div className='overflow-y-auto overflow-x-hidden max-h-screen'>
+                <table className="border-collapse text-darkGray font-paragraph">
+                    <thead className='align-top h-8'>
+                        <th></th>
+                        <th></th>
+                        <th className='text-xs'> Dec </th>
+                    </thead>
 
-                <tbody>
-                    <tr style={{height: calcultePerc(blockSizes[0].blockSize, 15728639, 660)}}>
-                        <td className="w-24 px-4 py-2 border-x-2 border-y-2 border-darkGray"> </td>
-                        <td className="px-4 py-2 border-x-2 border-y-2 border-darkGray text-center"> {blockSizes[0].blockSize} </td>
-                        <td className="align-bottom pl-2 text-xs font-semibold"> {addressLimits[addressLimits.length - 1]} </td>
-                    </tr>
+                    <tbody>
+                        <tr style={{height: calcultePerc(blockSizes[0].blockSize, 15728639, 660)}}>
+                            <td className="w-24 px-4 py-2 border-x-2 border-y-2 border-darkGray"> </td>
+                            <td className="px-4 py-2 border-x-2 border-y-2 border-darkGray text-center"> {blockSizes[0].blockSize} </td>
+                            <td className="align-bottom pl-2 text-xs font-semibold"> {addressLimits[addressLimits.length - 1]} </td>
+                        </tr>
 
-                    {dataHtml}
+                        {dataHtml}
 
-                    <tr className="h-16">
-                        <td className="w-24 px-4 py-2 bg-blue border-x-2 border-y-2 border-darkGray text-center text-sm"> S.O </td>
-                        <td className="px-4 py-2 bg-blue border-x-2 border-y-2 border-darkGray text-center"> 1048576 </td>
-                        <td className={`absolute top-6 ${tableData.length > 0 ? 'left-72 ml-4' : 'left-52'} text-xs font-semibold`}> 16777215 </td>
-                        <td className={`absolute -bottom-1 ${tableData.length > 0 ? 'left-72 ml-4' : 'left-52'} ml-1 text-xs font-semibold`}> 0 </td>
-                    </tr>
-                </tbody>
-            </table>
+                        <tr className="h-16">
+                            <td className="w-24 px-4 py-2 bg-blue border-x-2 border-y-2 border-darkGray text-center text-sm"> S.O </td>
+                            <td className="px-4 py-2 bg-blue border-x-2 border-y-2 border-darkGray text-center"> 1048576 </td>
+                            <td className={`absolute top-6 ${tableData.length > 0 ? 'left-72 ml-4' : 'left-52'} text-xs font-semibold`}> 16777215 </td>
+                            <td className={`absolute -bottom-1 ${tableData.length > 0 ? 'left-72 ml-4' : 'left-52'} ml-1 text-xs font-semibold`}> 0 </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </Draggable>
     )
 }
