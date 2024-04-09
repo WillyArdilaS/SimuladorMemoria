@@ -64,7 +64,6 @@ const MemoryFiles = ({blockSizes, adjustment, files, setActiveFiles}) => {
         } while(blockIndex <= 7);
 
         if(blockIndex > 7) {
-            setActualBlock
             alert("No hay espacio suficiente en la memoria");
         }
     }

@@ -36,6 +36,16 @@ const Header = () => {
                                 </ul>
                             )}
                         </li>
+
+                        <li className="mr-16 relative">
+                            <Link to="/segmentacion" className="inline-block font-paragraph font-medium text-white hover:scale-105 py-2 px-4" 
+                            onClick={() => {setOnToggle(false);}}>Segmentación</Link>
+                        </li>
+
+                        <li className="mr-16 relative">
+                            <Link to="/paginacion" className="inline-block font-paragraph font-medium text-white hover:scale-105 py-2 px-4" 
+                            onClick={() => {setOnToggle(false);}}>Paginación</Link>
+                        </li>
                     </ul>
                 </div>
             </nav>
